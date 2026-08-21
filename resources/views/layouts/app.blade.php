@@ -32,7 +32,7 @@
         <span class="lightbox-close cursor-hover absolute top-6 right-8 text-white font-bold text-sm tracking-[0.3em] uppercase z-50 bg-black/50 p-2 md:bg-transparent rounded hover:text-[#cccccc] transition-colors">&times; Tutup</span>
         <div class="lightbox-content-wrapper flex flex-col md:flex-row w-full h-full">
             <div class="lightbox-image-container w-full h-[50vh] md:h-full md:w-1/2 flex items-center justify-center p-4 md:p-12">
-                <img id="lightbox-img" src="" alt="Fullscreen view" class="max-w-full max-h-full object-contain drop-shadow-2xl">
+                <img id="lightbox-img" src="" alt="Fullscreen view" class="w-full max-w-2xl h-auto max-h-[80vh] md:max-h-[85vh] object-contain drop-shadow-2xl">
             </div>
             <div class="lightbox-text-container w-full h-[50vh] md:h-full md:w-1/2 flex flex-col justify-center items-center text-center p-8 md:p-16 bg-transparent border-t md:border-t-0 md:border-l border-white/10">
                 <h3 id="lightbox-title" class="text-4xl md:text-6xl font-black uppercase tracking-wider mb-6 text-white drop-shadow-md"></h3>

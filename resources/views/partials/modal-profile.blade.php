@@ -4,7 +4,7 @@
     
     <!-- Modal Content -->
     <div id="profile-modal-content" class="relative bg-[#0a0a0a] border border-[#1c1c1c] p-8 max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
-        <button onclick="toggleModal()" class="absolute top-4 right-4 text-[#cccccc] hover:text-white">
+        <button onclick="toggleModal()" class="absolute top-4 right-4 text-[#cccccc] hover:text-white" aria-label="Close Modal">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -12,11 +12,11 @@
         
         <div class="flex flex-col items-center mt-4">
             <div class="w-24 h-24 rounded-full border-2 border-white overflow-hidden mb-6">
-                <img src="https://picsum.photos/seed/zaim/200/200" alt="Zaim" class="w-full h-full object-cover">
+                <img src="{{ $aboutProfile->profile_image ?? 'https://picsum.photos/seed/zaim/200/200' }}" alt="{{ $aboutProfile->full_name ?? 'Zaim' }}" class="w-full h-full object-cover">
             </div>
             
-            <h3 class="text-xl font-bold tracking-widest uppercase mb-1">ZAIM</h3>
-            <p class="text-sm text-[#cccccc] tracking-wider uppercase mb-6 text-center">Fotografer | SMK Kartini Batam</p>
+            <h3 class="text-xl font-bold tracking-widest uppercase mb-1">{{ $aboutProfile->full_name ?? 'ZAIM' }}</h3>
+            <p class="text-sm text-[#cccccc] tracking-wider uppercase mb-6 text-center">Fotografer | {{ $aboutProfile->school ?? 'SMK Kartini Batam' }}</p>
             
             <div class="w-full h-px bg-[#1c1c1c] mb-6"></div>
             

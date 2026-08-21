@@ -61,6 +61,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.profile.edit') }}" class="flex items-center space-x-3 px-4 py-3 rounded-md {{ request()->routeIs('admin.profile.*') ? 'bg-[#1c1c1c] border border-[#333] text-white shadow-md' : 'text-[#706f6c] hover:bg-[#111] hover:text-white transition-colors' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <span>Edit Profil</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.password.edit') }}" class="flex items-center space-x-3 px-4 py-3 rounded-md {{ request()->routeIs('admin.password.*') ? 'bg-[#1c1c1c] border border-[#333] text-white shadow-md' : 'text-[#706f6c] hover:bg-[#111] hover:text-white transition-colors' }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                         <span>Ubah Password</span>

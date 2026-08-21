@@ -9,8 +9,8 @@
             <a href="{{ route('services.index') }}" class="hover:text-white transition-colors duration-300">Layanan</a>
             <a href="{{ route('about.index') }}" class="hover:text-white transition-colors duration-300">Tentang Saya</a>
             
-            <button onclick="toggleModal()" class="ml-4 w-10 h-10 rounded-full border border-[#444444] overflow-hidden hover:border-white transition-all duration-300">
-                <img src="https://picsum.photos/seed/zaim/100/100" alt="Profile" class="w-full h-full object-cover">
+            <button onclick="toggleModal()" class="ml-4 w-10 h-10 rounded-full border border-[#444444] overflow-hidden hover:border-white transition-all duration-300" aria-label="Buka Profil">
+                <img src="{{ $aboutProfile->profile_image ?? 'https://picsum.photos/seed/zaim/100/100' }}" alt="{{ $aboutProfile->full_name ?? 'Profile' }}" class="w-full h-full object-cover">
             </button>
         </div>
 

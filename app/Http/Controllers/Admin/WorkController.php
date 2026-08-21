@@ -30,19 +30,24 @@ class WorkController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'image_url' => 'nullable|url',
             'album_id' => 'nullable|exists:albums,id',
             'shooting_date' => 'nullable|date',
             'is_featured' => 'nullable|boolean'
         ]);
 
-        $imagePath = $request->file('image')->store('works', 'public');
+        if (!$request->hasFile('image') && !$request->filled('image_url')) {
+            return back()->withErrors(['image' => 'Pilih file foto atau masukkan Link/URL foto.'])->withInput();
+        }
+
+        $imagePath = $this->uploadImage($request);
 
         PhotographyWork::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title . '-' . Str::random(5)),
             'description' => $request->description,
-            'image_path' => '/storage/' . $imagePath,
+            'image_path' => $imagePath,
             'category' => $request->category,
             'album_id' => $request->album_id,
             'shooting_date' => $request->shooting_date,
@@ -65,7 +70,8 @@ class WorkController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
+            'image_url' => 'nullable|url',
             'album_id' => 'nullable|exists:albums,id',
             'shooting_date' => 'nullable|date',
             'is_featured' => 'nullable|boolean'
@@ -80,18 +86,43 @@ class WorkController extends Controller
             'is_featured' => $request->has('is_featured')
         ];
 
-        if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            if ($work->image_path && Str::startsWith($work->image_path, '/storage/')) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $work->image_path));
-            }
-            $imagePath = $request->file('image')->store('works', 'public');
-            $data['image_path'] = '/storage/' . $imagePath;
+        if ($request->hasFile('image') || $request->filled('image_url')) {
+            $data['image_path'] = $this->uploadImage($request);
         }
 
         $work->update($data);
 
         return redirect()->route('admin.works.index')->with('success', 'Karya berhasil diperbarui!');
+    }
+
+    private function uploadImage(Request $request): string
+    {
+        if ($request->hasFile('image')) {
+            try {
+                $response = \Illuminate\Support\Facades\Http::asMultipart()
+                    ->post('https://freeimage.host/api/1/upload', [
+                        'key' => '6d207e02198a847aa98d0a2a901485a5',
+                        'action' => 'upload',
+                        'source' => base64_encode(file_get_contents($request->file('image')->getRealPath())),
+                        'format' => 'json',
+                    ]);
+
+                if ($response->successful() && !empty($response->json()['image']['url'])) {
+                    return $response->json()['image']['url'];
+                }
+            } catch (\Throwable $e) {
+                // Fallback to local storage if API fails
+            }
+
+            $local = $request->file('image')->store('works', 'public');
+            return '/storage/' . $local;
+        }
+
+        if ($request->filled('image_url')) {
+            return $request->image_url;
+        }
+
+        return '';
     }
 
     public function destroy(PhotographyWork $work)

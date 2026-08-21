@@ -49,9 +49,16 @@
     </div>
 
     <div>
-        <label for="image" class="block text-[10px] tracking-[0.2em] uppercase text-[#cccccc] mb-2">File Foto (JPG/PNG/WEBP, Max 5MB) *</label>
-        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" required class="w-full bg-[#0a0a0a] border border-[#444444] text-white px-4 py-3 outline-none focus:border-white transition-colors text-sm mb-4">
+        <label for="image" class="block text-[10px] tracking-[0.2em] uppercase text-[#cccccc] mb-2">Unggah File Foto (JPG/PNG/WEBP, Max 10MB)</label>
+        <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" class="w-full bg-[#0a0a0a] border border-[#444444] text-white px-4 py-3 outline-none focus:border-white transition-colors text-sm mb-3">
+        
+        <div class="text-center text-xs text-[#888888] font-bold uppercase tracking-widest my-2">- ATAU -</div>
+
+        <label for="image_url" class="block text-[10px] tracking-[0.2em] uppercase text-[#cccccc] mb-2">Tempel Link / URL Direct Gambar (Opsional)</label>
+        <input type="url" id="image_url" name="image_url" value="{{ old('image_url') }}" placeholder="https://..." class="w-full bg-[#0a0a0a] border border-[#444444] text-white px-4 py-3 outline-none focus:border-white transition-colors text-sm mb-4">
+        
         @error('image') <p class="text-[#cccccc] text-xs mt-1">{{ $message }}</p> @enderror
+        @error('image_url') <p class="text-[#cccccc] text-xs mt-1">{{ $message }}</p> @enderror
 
         <div id="preview-container" class="hidden">
             <div class="text-[10px] tracking-[0.2em] uppercase text-[#cccccc] mb-2">Pratinjau Foto:</div>
@@ -81,6 +88,7 @@
     document.getElementById('image').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {
+            document.getElementById('image_url').value = '';
             const reader = new FileReader();
             reader.onload = function(e) {
                 document.getElementById('image-preview').src = e.target.result;
@@ -89,6 +97,14 @@
             reader.readAsDataURL(file);
         } else {
             document.getElementById('preview-container').classList.add('hidden');
+        }
+    });
+
+    document.getElementById('image_url').addEventListener('input', function(e) {
+        if (e.target.value.trim() !== '') {
+            document.getElementById('image').value = '';
+            document.getElementById('image-preview').src = e.target.value;
+            document.getElementById('preview-container').classList.remove('hidden');
         }
     });
 </script>

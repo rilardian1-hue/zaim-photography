@@ -72,4 +72,36 @@ class AlbumController extends Controller
         $album->delete();
         return redirect()->route('admin.albums.index')->with('success', 'Album berhasil dihapus!');
     }
+
+    public function generateDescription(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $title = $request->title;
+        $prompt = "Buat paragraf deskripsi yang puitis, profesional, dan SEO-friendly untuk album foto dengan judul/tema: '$title'. Jangan terlalu panjang, maksimal 3 kalimat. Gunakan bahasa Indonesia yang elegan.";
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Authorization' => 'Bearer REMOVED_SECRET',
+                'Content-Type' => 'application/json',
+            ])->post('https://openrouter.ai/api/v1/chat/completions', [
+                'model' => 'google/gemini-flash-1.5',
+                'messages' => [
+                    ['role' => 'user', 'content' => $prompt]
+                ]
+            ]);
+
+            if ($response->successful()) {
+                $result = $response->json();
+                $description = $result['choices'][0]['message']['content'] ?? '';
+                return response()->json(['success' => true, 'description' => trim($description)]);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Gagal menghubungi AI. '. $response->body()], 500);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }
