@@ -38,7 +38,7 @@ class AuthController extends Controller
 
         $user = \App\Models\User::where('email', $request->email)->first();
 
-        if (!$user || $user->secret_key !== $request->secret_key) {
+        if (!$user || empty($user->secret_key) || !hash_equals((string)$user->secret_key, (string)$request->secret_key)) {
             return back()->withErrors([
                 'email' => 'Email atau Kunci Rahasia tidak valid.',
             ])->onlyInput('email');

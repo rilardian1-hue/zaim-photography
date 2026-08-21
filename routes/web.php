@@ -33,8 +33,10 @@ Route::get('/orders/{orderNumber}/success', [OrderController::class, 'success'])
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/login/secret', [AuthController::class, 'loginWithSecret']);
+Route::middleware('throttle:5,1')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login/secret', [AuthController::class, 'loginWithSecret']);
+});
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin Portal
