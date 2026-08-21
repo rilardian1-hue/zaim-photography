@@ -84,7 +84,7 @@ class AlbumController extends Controller
 
         try {
             $response = \Illuminate\Support\Facades\Http::withHeaders([
-                'Authorization' => 'Bearer REMOVED_SECRET',
+                'Authorization' => 'Bearer ' . env('OPENROUTER_API_KEY'),
                 'Content-Type' => 'application/json',
             ])->post('https://openrouter.ai/api/v1/chat/completions', [
                 'model' => 'google/gemini-flash-1.5',
